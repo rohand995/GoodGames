@@ -1,7 +1,8 @@
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from typing import List
 from steam_api import get_owned_games
 
 # Initialize FastAPI
@@ -17,12 +18,16 @@ app.mount("/styles", StaticFiles(directory="styles"), name="styles")
 def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-@app.get("/recommend/{steam_id}")
-def get_recommendations(steam_id: str):
-    owned_games = get_owned_games(steam_id)
-    # Placeholder for recommendation logic
-    recommended_games = owned_games[:5]  # Just return first 5 games for now
-    return {"recommended_games": recommended_games}
+@app.post("/recommend")
+def get_recommendations(steam_ids: List[str]):
+    recommendations = {}
+    
+    for steam_id in steam_ids:
+        owned_games = get_owned_games(steam_id)
+        recommended_games = owned_games[:5]  # Just the top 5 games
+        recommendations[steam_id] = recommended_games
+    
+    return JSONResponse(content={"recommendations": recommendations})
 
 if __name__ == "__main__":
     import uvicorn

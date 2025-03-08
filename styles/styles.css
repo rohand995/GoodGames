@@ -1,8 +1,8 @@
 .btn-primary {
-    background-color: #4CAF50;  /* Change to green */
-    border-color: #4CAF50;
+    background-color: #0c0ced;  /* Change to green */
+    border-color: #0c0ced;
 }
 
 .btn-primary:hover {
-    background-color: #45a049;  /* Darker green for hover effect */
+    background-color: #0c0ced;  /* Darker green for hover effect */
 }
