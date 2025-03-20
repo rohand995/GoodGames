@@ -1,0 +1,39 @@
+{
+  "success": 1,
+  "query_summary": {
+    "num_reviews": 1,
+    "review_score": 0,
+    "review_score_desc": "1 user reviews",
+    "total_positive": 1,
+    "total_negative": 0,
+    "total_reviews": 1
+  },
+  "reviews": [
+    {
+      "recommendationid": "144443228",
+      "author": {
+        "steamid": "76561199126768999",
+        "num_games_owned": 0,
+        "num_reviews": 83,
+        "playtime_forever": 11,
+        "playtime_last_two_weeks": 0,
+        "playtime_at_review": 11,
+        "last_played": 1691967627
+      },
+      "language": "english",
+      "review": "A very lightweight sports game, which is not at all a criticism, that rewards getting a feel for the physics of the ball and timing your jumps to propel the same over the head of one's opponent and into the goal. Making it feel, oddly, a bit more like volleyball than soccer.\n\nThe game plays better with a controller than the keyboard, and local multiplayer requires one player to use the controller, the other the keyboard. So this is well-suited, as 1v1 game, to playing with an opponent who is young or otherwise inexperienced at videogames, the better player using the keyboard controls.\n\nPlaying against the AI, one will find it occasionally a pushover, allowing an easy jump kick to score straight away in a match. And at other times, fairly good at defending and going on the offense.\n\nFor the price, that's not half bad.",
+      "timestamp_created": 1692309756,
+      "timestamp_updated": 1736169868,
+      "voted_up": true,
+      "votes_up": 0,
+      "votes_funny": 0,
+      "weighted_vote_score": 0.5,
+      "comment_count": 0,
+      "steam_purchase": true,
+      "received_for_free": false,
+      "written_during_early_access": false,
+      "primarily_steam_deck": false
+    }
+  ],
+  "cursor": "AoJwrrnynZQDfPWApwQ="
+}

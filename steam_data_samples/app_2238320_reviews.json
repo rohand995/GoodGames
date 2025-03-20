@@ -1,0 +1,39 @@
+{
+  "success": 1,
+  "query_summary": {
+    "num_reviews": 1,
+    "review_score": 0,
+    "review_score_desc": "1 user reviews",
+    "total_positive": 0,
+    "total_negative": 1,
+    "total_reviews": 1
+  },
+  "reviews": [
+    {
+      "recommendationid": "134933556",
+      "author": {
+        "steamid": "76561197980016571",
+        "num_games_owned": 0,
+        "num_reviews": 63,
+        "playtime_forever": 21,
+        "playtime_last_two_weeks": 0,
+        "playtime_at_review": 21,
+        "last_played": 1679191439
+      },
+      "language": "english",
+      "review": "Needs controller support. Made do with a 3rd party remapping program.\nControl in the air is a bit weird, as though the character has more inertia than expected, and I found myself drifting into hazards easily.\n\nBut awkward controls with tight jumps and positioning would be fine were it not for the life system. You get [b]three lives plus one life per checkpoint. Use them[/b] all up (which you will) [b]and it's game over.[/b]\n\nContinues cost special gems that you only get at special checkpoints, and bring you to the very start of the entire level. So, good luck with that.\n\n[b]It's an awkward-to-control precision platformer that you will have to grind and grind and grind the same areas over and over and over until you've memorized every last inch.[/b]",
+      "timestamp_created": 1679192933,
+      "timestamp_updated": 1679192933,
+      "voted_up": false,
+      "votes_up": 3,
+      "votes_funny": 0,
+      "weighted_vote_score": "0.503305017948150635",
+      "comment_count": 0,
+      "steam_purchase": true,
+      "received_for_free": false,
+      "written_during_early_access": false,
+      "primarily_steam_deck": false
+    }
+  ],
+  "cursor": "AoJ4qNjs+4YDdMPdggQ="
+}

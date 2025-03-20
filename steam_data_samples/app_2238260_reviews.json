@@ -1,0 +1,39 @@
+{
+  "success": 1,
+  "query_summary": {
+    "num_reviews": 1,
+    "review_score": 0,
+    "review_score_desc": "1 user reviews",
+    "total_positive": 0,
+    "total_negative": 1,
+    "total_reviews": 1
+  },
+  "reviews": [
+    {
+      "recommendationid": "187476590",
+      "author": {
+        "steamid": "76561198311055381",
+        "num_games_owned": 3555,
+        "num_reviews": 70,
+        "playtime_forever": 12,
+        "playtime_last_two_weeks": 0,
+        "playtime_at_review": 12,
+        "last_played": 1739029498
+      },
+      "language": "english",
+      "review": "My girlfriend, my brother and my friends, we all really liked playing their ''Gigantosaurus Dino Kart'' game, so I thought this would be another hit for our local multiplayer games parties.\n\nThis game seems fun and would recommend it to play with friends or your kid, if there wasn't a bug where the game detects all of my PlayStation DS4 and/or my Xbox 360 controllers, but it recognizes them all as one and the same controller... so you can play the same character with any connected controller and all connected controllers at once, basically single player, but you can't play with friends each their own character as local multiplayer. The game doesn't recognize different controllers as different controllers, but all as one and the same controller.\n\nIf you don't intend to buy the game for a local multiplayer experience, but just for the single player, for example for your kid playing alone,I recommend the game... I guess.",
+      "timestamp_created": 1739030256,
+      "timestamp_updated": 1739111462,
+      "voted_up": false,
+      "votes_up": 0,
+      "votes_funny": 0,
+      "weighted_vote_score": 0.5,
+      "comment_count": 0,
+      "steam_purchase": true,
+      "received_for_free": false,
+      "written_during_early_access": false,
+      "primarily_steam_deck": false
+    }
+  ],
+  "cursor": "AoJwx97H9ZQDfqaVywU="
+}
