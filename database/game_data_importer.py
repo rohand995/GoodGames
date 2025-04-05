@@ -12,6 +12,7 @@ class GameRecord:
         self.is_free = kwargs.get("is_free")
         self.descrip_detail = kwargs.get("descrip_detail")
         self.descrip_short = kwargs.get("descrip_short")
+        self.capsule_img = kwargs.get("capsule_img")
         self.developer = kwargs.get("developer")
         self.publisher = kwargs.get("publisher")
         self.price = kwargs.get("price")
@@ -33,7 +34,7 @@ class GameRecord:
 
     def to_tuple(self):
         return (self.game_id, self.game_type, self.game_name, self.is_free, self.descrip_detail,
-                self.descrip_short, self.developer, self.publisher, self.price, self.platforms,
+                self.descrip_short, self.capsule_img, self.developer, self.publisher, self.price, self.platforms,
                 self.metacritic_score, self.metacritic_review, self.categories, self.genres,
                 self.recommendations, self.release_date)
 
@@ -65,10 +66,10 @@ def bulk_insert_games(conn, games):
         cur.execute("TRUNCATE game_info.games CASCADE")
         query = """
         INSERT INTO game_info.games (
-            game_id, game_type, game_name, is_free, descrip_detail, descrip_short,
+            game_id, game_type, game_name, is_free, descrip_detail, descrip_short, capsule_image,
             developer, publisher, price, platforms, metacritic_score, metacritic_review,
             categories, genres, recommendations, release_date
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         cur.executemany(query, [game.to_tuple() for game in games])
         conn.commit()
@@ -100,6 +101,7 @@ def parse_game_file(filepath):
         game_record.is_free = data_json['data']['is_free']
         game_record.descrip_detail = data_json['data']['detailed_description']
         game_record.descrip_short = data_json['data']['short_description']
+        game_record.capsule_img = data_json['data']['capsule_image']
         game_record.developer = data_json['data']['developers'][0]
         game_record.publisher = data_json['data']['publishers'][0]
         game_record.price = data_json['data']['price_overview']['final_formatted']

@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS game_info.games (
 	is_free bool,
 	descrip_detail text,
 	descrip_short text,
+	capsule_image text,
 	developer text,
 	publisher text,
 	price text,
@@ -27,11 +28,11 @@ CREATE TABLE IF NOT EXISTS game_info.reviews(
 	rec_id text,
 	game_id int REFERENCES game_info.games (game_id), 
 	author_id text,
-	author_playtime int,
+	author_playtime bigint,
 	review text,
 	voted_up bool,
-	votes_up int,
-	votes_funny int,
+	votes_up bigint,
+	votes_funny bigint,
 	weighted_vote_score numeric,
 	PRIMARY KEY (rec_id, game_id, author_id)
 );
