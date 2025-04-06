@@ -22,7 +22,9 @@ def home(request: Request):
 
 @app.post("/recommend")
 async def recommend(request: Request):
-    game_ids = recommender.get_recommendations([])
+    json_data = await request.json()
+    steam_ids = json_data['steam_ids']
+    game_ids = recommender.get_recommendations(steam_ids)
     game_info = recommender.get_game_info(game_ids)
     return JSONResponse(content={"recommendations": game_info})
 
