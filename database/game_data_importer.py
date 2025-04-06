@@ -148,7 +148,7 @@ def parse_review_file(filepath):
 
 def main():
     # This is a cardinal sin when it comes to security, but who gives a damn its a local db!
-    with psycopg.connect(host='localhost', dbname='game_reviews', user='main', password='access123', port=5432) as conn:
+    with psycopg.connect(host='localhost', dbname='postgres', user='main', password='access123', port=5432) as conn:
         game_dir = '../steam_apps/'
         review_dir = '../steam_reviews/'
         game_data = []

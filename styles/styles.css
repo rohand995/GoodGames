@@ -6,3 +6,16 @@
 .btn-primary:hover {
     background-color: #0c0ced;  /* Darker green for hover effect */
 }
+
+.card {
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card-img-top {
+    height: 100px;
+    object-fit: cover;
+}
