@@ -7,7 +7,8 @@ import random #temporary
 def recommend_single(steam_id: str) -> dict[str, float]:
     with psycopg.connect(host='localhost', dbname='postgres', user='main', password='access123', port=5432) as conn:
         with conn.cursor() as cur:
-            cur.execute("SELECT game_id FROM game_info.games ORDER BY RANDOM() LIMIT 8;")
+            # cur.execute("SELECT game_id FROM game_info.games ORDER BY RANDOM() LIMIT 8;")
+            cur.execute("SELECT game_id FROM game_info.games ORDER BY RANDOM() LIMIT 32;")
             game_ids = [row[0] for row in cur.fetchall()]
         return {game_id: random.random() for game_id in game_ids}
 
@@ -32,11 +33,15 @@ def recommend_multiple(steam_ids: list[str]) -> dict[str, float]:
     return per_game_scores
     #the caller just has to take the dict and sort descending by score
 
-
 def get_recommendations(steam_ids): # use steam_ids later for reccomendations
     per_game_scores = recommend_multiple(steam_ids)
-    game_list = sorted([(game_id, score) for game_id, score in per_game_scores.items()], key = lambda x: -x[1])
-    recommendations = [game_id for game_id, _ in game_list][:8]
+    game_list = sorted([(game_id, score) for game_id, score in per_game_scores.items() if score > 0], key = lambda x: -x[1])
+    #round down length of list to nearest multiple of 4, unless fewer than 4 games were returned
+    N = len(game_list)
+    if N > 4:
+        N = N - (N % 4)
+    #
+    recommendations = [game_id for game_id, _ in game_list][:N]
     #
     return recommendations
     
