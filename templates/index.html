@@ -11,48 +11,122 @@
     <div class="container text-center mt-5">
         <h1 class="display-4">Steam Multiplayer Game Recommender</h1>
         <p class="lead">Enter your Steam IDs to get personalized recommendations.</p>
-        <form id="recommendForm" class="d-flex justify-content-center" method="POST">
-            <input type="text" id="steam_id" name="steam_id" class="form-control w-25 me-2" placeholder="Enter Steam ID" required>
-            <button type="submit" class="btn btn-primary">Get Recommendations</button>
+        <form id="recommendForm" class="d-flex flex-column align-items-center" method="POST">
+            <div class="d-flex w-50 mb-3">
+                <input type="text" id="steam_id1" name="steam_id" class="form-control me-2" placeholder="Enter Steam ID 1" required>
+            </div>
+            <div class="d-flex w-50 mb-3">
+                <input type="text" id="steam_id2" name="steam_id" class="form-control me-2" placeholder="Enter Steam ID 2" required>
+            </div>
+            <div class="d-flex w-50 mb-3">
+                <input type="text" id="steam_id3" name="steam_id" class="form-control me-2" placeholder="Enter Steam ID 3 (or leave blank)">
+            </div>
+            <div class="d-flex w-50 mb-3">
+                <input type="text" id="steam_id4" name="steam_id" class="form-control me-2" placeholder="Enter Steam ID 4 (or leave blank)">
+            </div>
+            <div class="d-flex w-50 mb-3">
+                <button type="submit" class="btn btn-primary">Get Recommendations</button>
+            </div>
         </form>
-        
 
-        <div id="recommendations" class="mt-4">
+        <div id="recommendations" class="mt-4 d-flex flex-wrap justify-content-start">
             <!-- Recommendations will be displayed here -->
         </div>
     </div>
 
     <script>
-        // JavaScript to handle form submission and display results
         document.getElementById("recommendForm").addEventListener("submit", async function(event) {
-    event.preventDefault();  // Prevent form default submission
+            event.preventDefault();
+    
+            const ids = ["steam_id1", "steam_id2", "steam_id3", "steam_id4"];
+            const steamIds = ids.map(id => document.getElementById(id).value.trim())
+                                .filter(id => id !== "");
+    
+            const response = await fetch("/recommend", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ steam_ids: steamIds })
+            });
 
-    const steamIds = document.getElementById("steam_id").value.split(",");  // Split the input into an array of Steam IDs
-    const response = await fetch("/recommend", {
-        method: "POST",  // This ensures a POST request
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ steam_ids: steamIds })  // Send the Steam IDs as JSON
-    });
+            const data = await response.json();
+            const recommendationsDiv = document.getElementById("recommendations");
+            recommendationsDiv.innerHTML = "";
 
-    const data = await response.json();
-    const recommendationsDiv = document.getElementById("recommendations");
-    recommendationsDiv.innerHTML = "";  // Clear previous recommendations
+            // If recommendations exist, create a card for each game
+            if (data.recommendations) {
+                data.recommendations.forEach(game => {
+                    // Create a new card for each game
+                    const gameCard = document.createElement("div");
+                    gameCard.classList.add("card", "m-3", "bg-dark", "text-light", "d-flex", "flex-column");
+                    gameCard.style.width = "18rem";
 
-    if (data.recommendations) {
-        Object.entries(data.recommendations).forEach(([steamId, games]) => {
-            const gamesList = games.map(game => `<li>${game}</li>`).join("");
-            recommendationsDiv.innerHTML += `
-                <h3>Recommendations for Steam ID: ${steamId}</h3>
-                <ul>${gamesList}</ul>
-            `;
+                    // Add image to the card
+                    const img = document.createElement("img");
+                    img.src = game.image_url;
+                    img.classList.add("card-img-top");
+                    img.alt = game.name;
+                    gameCard.appendChild(img);
+
+                    // Create card body
+                    const cardBody = document.createElement("div");
+                    cardBody.classList.add("card-body");
+
+                    // Add the game title (name is from backend data)
+                    const title = document.createElement("h5");
+                    title.classList.add("card-title");
+
+                    const link = document.createElement("a");
+                    link.href = game.store_url;
+                    link.target = "_blank";
+                    link.textContent = game.name;
+                    link.style.color = "inherit";
+                    link.style.textDecoration = "none";
+
+                    title.appendChild(link);
+                    cardBody.appendChild(title);
+
+                    // Add price as a tag
+                    const priceTag = document.createElement("span");
+                    priceTag.classList.add("badge", "bg-primary", "me-1");
+                    priceTag.textContent = `${game.price}`;
+                    cardBody.appendChild(priceTag);
+
+                    // Add release date as a tag
+                    const releaseDateTag = document.createElement("span");
+                    releaseDateTag.classList.add("badge", "bg-primary", "me-1");
+                    releaseDateTag.textContent = `${game.release_date}`;
+                    cardBody.appendChild(releaseDateTag);
+
+                    // Add rating as a tag (if exists)
+                    if (game.rating) {
+                        const ratingTag = document.createElement("span");
+                        ratingTag.classList.add("badge", "bg-primary", "me-1");
+                        ratingTag.textContent = `${game.rating}/100`;
+                        cardBody.appendChild(ratingTag);
+                    }
+
+                    // Add genres as tags
+                    const genres = document.createElement("div");
+                    genres.classList.add("mb-2");
+                    game.genres.forEach(genre => {
+                        const genreTag = document.createElement("span");
+                        genreTag.classList.add("badge", "bg-primary", "me-1");
+                        genreTag.textContent = genre;
+                        genres.appendChild(genreTag);
+                    });
+                    cardBody.appendChild(genres);
+
+                    gameCard.appendChild(cardBody);
+
+                    recommendationsDiv.appendChild(gameCard);
+                });
+            } else {
+                recommendationsDiv.innerHTML = "<p>No recommendations found.</p>";
+            }
+
         });
-    } else {
-        recommendationsDiv.innerHTML = "<p>No recommendations found.</p>";
-    }
-});
-
-    </script>
+    </script>    
 </body>
 </html>
