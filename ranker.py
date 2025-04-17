@@ -4,7 +4,10 @@ import nimfa
 from scipy.sparse import csr_matrix
 from sklearn.metrics.pairwise import cosine_similarity
 
+
 # Want to use collaborative filtering and matrix factorization
+# ARCHFLAGS="-arch arm64" SDKROOT=$(xcrun --sdk macosx --show-sdk-path) pip install scikit-surprise
+# Convoluted pip install for Apple Silicon
 
 # For CF
 # Assemble the matrix
@@ -110,36 +113,45 @@ def predict_all(R, sim, mu, b_u, b_i, k=5):
                 P[u, i] = baseline_ui + numer / denom
     return P
 
-def perform_nmf(R, rank=10, max_iter=100):
-    """
-    Perform NMF on a CSR user-item matrix using nimfa.
-    Returns the full predicted matrix as a NumPy ndarray.
-    """
-    R = R.astype(np.float32)
+def funk_svd(csr_data, k=20, steps=50, alpha=0.005, reg=0.02, verbose=True):
+    n_users, n_items = csr_data.shape
+    P = np.random.normal(scale=1./k, size=(n_users, k))
+    Q = np.random.normal(scale=1./k, size=(n_items, k))
 
-    nmf = nimfa.Nmf(R, rank=rank, max_iter=max_iter, update='euclidean', objective='fro')
-    nmf_fit = nmf()
+    csr_data = csr_data.tocoo()  # Efficient iteration
 
-    # Convert factor matrices to numpy arrays
-    W = np.array(nmf_fit.basis())
-    H = np.array(nmf_fit.coef())
+    for step in range(steps):
+        total_loss = 0
+        for u, i, r_ui in zip(csr_data.row, csr_data.col, csr_data.data):
+            pred = np.dot(P[u], Q[i])
+            error = r_ui - pred
+            total_loss += error ** 2
 
-    # Reconstruct and return the dense user-item prediction matrix
-    R_hat = np.dot(W, H)  # shape: (num_users, num_items)
-    return R_hat.toarray()
+            # Gradient Descent update
+            P[u] += alpha * (error * Q[i] - reg * P[u])
+            Q[i] += alpha * (error * P[u] - reg * Q[i])
+
+        if verbose and (step % 5 == 0 or step == steps - 1):
+            rmse = np.sqrt(total_loss / len(csr_data.data))
+            print(f"Step {step+1}/{steps}: RMSE = {rmse:.4f}")
+
+    return P @ Q.T  # Final predicted matrix
 
 if __name__=="__main__":
     with psycopg.connect(host='localhost', dbname='game_reviews', user='main', password='access123', port=5432) as conn:
         ratings_matrix, reviewer_map, game_map = build_ratings_matrix(conn)
+        # Uncomment for item-item CF
         # mu, b_u, b_i = compute_baselines(ratings_matrix)
         # sim = compute_item_similarities(ratings_matrix)
         # P = predict_all(ratings_matrix, sim, mu, b_u, b_i, k=5)
         # np.save('item-cf.npy',P)
         # P = np.load('item-cf.npy')
         # print(P)
-        # P = perform_nmf(ratings_matrix,5,1000)
-        # print(P)
-        # np.save('mf-matrix.npy', P)
+        # Uncomment for MF model
+        P = funk_svd(ratings_matrix,25, steps=2000)
+        print(P)
+        np.save('mf-matrix.npy', P)
+
         # P = np.load('mf-matrix.npy')
         # print(P)
 
