@@ -13,6 +13,11 @@ from sklearn.metrics.pairwise import cosine_similarity
 # Assemble the matrix
 # Use the weighted vote score
 
+mf_matrix = np.load('mf-matrix.npy')
+item_cf_matrix = np.load('item-cf.npy')
+
+
+
 def get_all_game_ids(conn):
     with conn.cursor() as cur:
         cur.execute("SELECT game_id FROM game_info.games")
@@ -137,6 +142,12 @@ def funk_svd(csr_data, k=20, steps=50, alpha=0.005, reg=0.02, verbose=True):
 
     return P @ Q.T  # Final predicted matrix
 
+with psycopg.connect(host='localhost', dbname='game_reviews', user='main', password='access123', port=5432) as conn:
+    ratings_matrix, reviewer_map, game_map = build_ratings_matrix(conn)
+
+alpha = .6
+combined_rank = alpha * mf_matrix + (1-alpha) * mf_matrix
+
 if __name__=="__main__":
     with psycopg.connect(host='localhost', dbname='game_reviews', user='main', password='access123', port=5432) as conn:
         ratings_matrix, reviewer_map, game_map = build_ratings_matrix(conn)
@@ -148,10 +159,10 @@ if __name__=="__main__":
         # P = np.load('item-cf.npy')
         # print(P)
         # Uncomment for MF model
-        P = funk_svd(ratings_matrix,25, steps=2000)
-        print(P)
-        np.save('mf-matrix.npy', P)
-
+        # P = funk_svd(ratings_matrix,25, steps=2000)
+        # print(P)
+        # np.save('mf-matrix.npy', P)
+        # print(combined_rank)
         # P = np.load('mf-matrix.npy')
         # print(P)
 

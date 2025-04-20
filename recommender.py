@@ -1,6 +1,7 @@
 import psycopg
 
 import random #temporary
+import ranker
 
 #TODO: this function uses MF/CF to get the scores of each game for a single user
 #the return value is a dictionary of [game id] -> recommendation score
@@ -10,7 +11,9 @@ def recommend_single(steam_id: str) -> dict[str, float]:
             # cur.execute("SELECT game_id FROM game_info.games ORDER BY RANDOM() LIMIT 8;")
             cur.execute("SELECT game_id FROM game_info.games ORDER BY RANDOM() LIMIT 32;")
             game_ids = [row[0] for row in cur.fetchall()]
-        return {game_id: random.random() for game_id in game_ids}
+            steam_id_mapping = ranker.reviewer_map[steam_id]
+
+        return {game_id: ranker.combined_rank[steam_id_mapping][ranker.game_map[game_id]] for game_id in game_ids}
 
 #a function that combines each user's score for a game into a single group score
 #currently we'll combine by multiplication
