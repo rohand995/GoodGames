@@ -176,3 +176,8 @@ cython_debug/
 .idea/inspectionProfiles/profiles_settings.xml
 .idea/GoodGames.iml
 .idea/workspace.xml
+report/good_games_report.blg
+report/good_games_report.bbl
+report/good_games_report.aux
+report/good_games_report.out
+report/good_games_report.synctex.gz
